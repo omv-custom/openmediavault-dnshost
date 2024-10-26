@@ -1,0 +1,8 @@
+version: "1.0"
+type: route
+data:
+  url: "/network/dnshost"
+  title: _("Dynamic Hostname")
+  editing: true
+  notificationTitle: _("Updated hostname-to-IP mapping.")
+  component: omv-network-dnshost-form-page

@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the openmediavault-flashmemory package.
+# 
+# Translators:
+# zaba141 <jnowakk11@gmail.com>, 2024
+msgid ""
+msgstr ""
+"Project-Id-Version: openmediavault-dnshost\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-06-26 17:05-0500\n"
+"PO-Revision-Date: 2015-03-11 12:03+0000\n"
+"Last-Translator: Cyryl  <cyrylsochacki@gmail.com>, 2016,2023\n"
+"Language-Team: Polish (Poland) (http://app.transifex.com/openmediavault-plugin-developers/openmediavault-flashmemory/language/pl_PL/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: pl_PL\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
+
+msgid "ViewPowerUps"
+msgstr "ViewPowerUps"
+
+msgid "Viewpowerups"
+msgstr "Viewpowerups"
+
+msgid "Url"
+msgstr "Url"
+
+msgid "Zapisz"
+msgstr "Zapisz wszystko"
+
+msgid "Zapisz Ustawienia"
+msgstr "Zapisz Ustawienia"
+
+msgid "Wiki"
+msgstr ""

@@ -1,0 +1,14 @@
+Source: openmediavault-dnshost
+Section: net
+XB-Plugin-Section: filesystems
+Priority: optional
+Maintainer: OpenMediaVault Plugin Developers <plugins@omv-extras.org>
+Build-Depends: debhelper (>= 13)
+Standards-Version: 1.0.0
+Homepage: http://omv-extras.org/
+Package: openmediavault-dnshost
+Version: 1.1
+Architecture: all
+Depends: openmediavault (>= 7)
+Description: dns host plugin for openmediavault
+ Update IP to no-ip, ddns, itp.

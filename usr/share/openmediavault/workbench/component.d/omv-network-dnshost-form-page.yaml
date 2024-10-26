@@ -1,0 +1,110 @@
+---
+version: "1.0"
+type: component
+data:
+  name: omv-network-dnshost-form-page
+  type: tabsPage
+  config:
+    tabs:
+      - type: form
+        label: _("NoIp")
+        config:
+          request:
+            service: NetworkDnshost
+            get:
+              method: getSettings
+            post:
+              method: setSettings
+          fields:
+            - type: checkbox
+              name: noip
+              label: _("NoIpActive")
+              value: false
+            - type: textInput
+              name: noip_username
+              label: _("Noip Username")
+              value: "username"
+            - type: textInput
+              name: noip_password
+              label: _("Noip Password")
+              value: "password"
+            - type: textInput
+              name: noip_hostname
+              label: _("Noip Hostname")
+              value: "host.com"
+            - type: textInput
+              name: noip_ip
+              label: _("Actual IP")
+          buttons:
+            - template: submit
+            - type: iconButton
+              icon: start
+              text: _("Start Update")
+              tooltip: _("Run")
+              enabledConstraints:
+                minSelected: 1
+                maxSelected: 1
+              execute:
+                type: taskDialog
+                taskDialog:
+                  config:
+                    title: _("Run job")
+                    startOnInit: true
+                    request:
+                      service: NetworkDnshost
+                      method: updateIP_noip
+            - template: cancel
+              execute:
+                type: url
+                url: "/network/dnshost"
+      - type: form
+        label: _("dynu DDNS")
+        config:
+          request:
+            service: NetworkDnshost
+            get:
+              method: getSettings
+            post:
+              method: setSettings
+          fields:
+            - type: checkbox
+              name: ddns
+              label: _("ddnsActive")
+              value: false
+            - type: textInput
+              name: ddns_username
+              label: _("ddns Username")
+              value: "username"
+            - type: textInput
+              name: ddns_password
+              label: _("ddns Password")
+              value: "password"
+            - type: textInput
+              name: ddns_hostname
+              label: _("ddns Hostname")
+              value: "host.com"
+            - type: textInput
+              name: ddns_ip
+              label: _("Actual IP")
+          buttons:
+            - template: submit
+            - type: iconButton
+              icon: start
+              text: _("Start Update")
+              tooltip: _("Run")
+              enabledConstraints:
+                minSelected: 1
+                maxSelected: 1
+              execute:
+                type: taskDialog
+                taskDialog:
+                  config:
+                    title: _("Run job")
+                    startOnInit: true
+                    request:
+                      service: NetworkDnshost
+                      method: updateIP_dynuddns
+            - template: cancel
+              execute:
+                type: url
+                url: "/network/dnshost"
