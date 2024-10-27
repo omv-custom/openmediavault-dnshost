@@ -5,32 +5,32 @@ import logging
 import argparse
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, filename="/var/log/dnshost/dnshost.log", format="%(asctime)s %(levelname)s %(message)s")
 
 def update_noip_hostname(username, password, hostname, ip):
     url = f"https://dynupdate.no-ip.com/nic/update?hostname={hostname}&myip={ip}"
     response = requests.get(url, auth=(username, password))
     
     if "nochg" in response.text:
-        logging.info("Current IP address, no update performed.")
+        logging.info("NOIP: Current IP address, no update performed.")
     
     if "good" in response.text:
-        logging.info("IP updated: %s" % response.text)
+        logging.info("NOIP: NOIP: IP updated: %s" % response.text)
     
     if "nohost" in response.text:
         logging.info("Hostname does not exist for the specified account.")
     
     if "badauth" in response.text:
-        logging.info("Invalid username or password.")
+        logging.info("NOIP: Invalid username or password.")
     
     if "badagent" in response.text:
-        logging.info("Client disabled.")
+        logging.info("NOIP: Client disabled.")
     
     if "abuse" in response.text:
-        logging.info("Username blocked due to abuse.")
+        logging.info("NOIP: Username blocked due to abuse.")
     
     if "911" in response.text:
-        logging.info("Unexpected error.")
+        logging.info("NOIP: Unexpected error.")
     
     print(response.text)
 

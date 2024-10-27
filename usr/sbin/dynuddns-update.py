@@ -5,32 +5,32 @@ import logging
 import argparse
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, filename="/var/log/dnshost/dnshost.log", format="%(asctime)s %(levelname)s %(message)s")
 
 def update_ddns_hostname(username, password, hostname, ip):
     url = f"https://api.dynu.com/nic/update?hostname={hostname}&myip={ip}&password={password}"
     response = requests.get(url, auth=(username, password))
     
     if "nochg" in response.text:
-        logging.info("Current IP address, no update performed.")
+        logging.info("DynuDns: Current IP address, no update performed.")
     
     if "good" in response.text:
-        logging.info("IP updated: %s" % response.text)
+        logging.info("DynuDns: IP updated: %s" % response.text)
     
     if "nohost" in response.text:
-        logging.info("Hostname does not exist for the specified account.")
+        logging.info("DynuDns: Hostname does not exist for the specified account.")
     
     if "badauth" in response.text:
-        logging.info("Invalid username or password.")
+        logging.info("DynuDns: Invalid username or password.")
     
     if "badagent" in response.text:
-        logging.info("Client disabled.")
+        logging.info("DynuDns: Client disabled.")
     
     if "abuse" in response.text:
-        logging.info("Username blocked due to abuse.")
+        logging.info("DynuDns: Username blocked due to abuse.")
     
     if "911" in response.text:
-        logging.info("Unexpected error.")
+        logging.info("DynuDns: Unexpected error.")
     
     print(response.text)
 

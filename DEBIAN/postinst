@@ -5,6 +5,7 @@ set -e
 . /etc/default/openmediavault
 . /usr/share/openmediavault/scripts/helper-functions
 
+dir_logs="/var/log/dnshost"
 RED="\e[31m"
 GREEN="\e[32m"
 ENDCOLOR="\e[0m"
@@ -19,6 +20,15 @@ case "$1" in
         omv-confdbadm create "conf.system.network.dnshost"
         if [ -n "$2" ]; then
             omv-confdbadm migrate "conf.system.network.dnshost" "${2}"
+        fi
+        
+        if [ -d "$dir_logs" ]
+        then
+            echo "${GREEN}Logs Files Is Exists${ENDCOLOR}"
+        else
+        mkdir /var/log/dnshost
+        touch /var/log/dnshost/dnshost.log
+        echo "${RED}Log Directory and file has created!${ENDCOLOR}"
         fi
 
     ;;
