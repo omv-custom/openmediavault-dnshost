@@ -123,7 +123,58 @@ data:
                 type: url
                 url: "/network/dnshost"
       - type: form
-        label: _("Settings")
+        label: _("Ydns")
+        config:
+          request:
+            service: NetworkDnshost
+            get:
+              method: getSettings
+            post:
+              method: setSettings
+          fields:
+            - type: checkbox
+              name: ydns
+              label: _("ydnsActive")
+              value: false
+            - type: textInput
+              name: ydns_username
+              label: _("ydns Username")
+              value: "username"
+            - type: textInput
+              name: ydns_password
+              label: _("ydns Password")
+              value: "password"
+            - type: textInput
+              name: ydns_hostname
+              label: _("ydns Hostname")
+              value: "host.com"
+            - type: textInput
+              name: ydns_ip
+              label: _("Actual IP")
+          buttons:
+            - template: submit
+            - type: iconButton
+              icon: start
+              text: _("Start Update")
+              tooltip: _("Run")
+              enabledConstraints:
+                minSelected: 1
+                maxSelected: 1
+              execute:
+                type: taskDialog
+                taskDialog:
+                  config:
+                    title: _("Run job")
+                    startOnInit: true
+                    request:
+                      service: NetworkDnshost
+                      method: updateIP_ydns
+            - template: cancel
+              execute:
+                type: url
+                url: "/network/dnshost"
+      - type: form
+        label: _("SettingsCron")
         config:
           request:
             service: Cron

@@ -51,6 +51,26 @@
             "type": "string",
             "default": "0.0.0.0"
         },
+        "ydns": {
+			"type": "boolean",
+			"default": false
+		},
+        "ydns_username": {
+            "type": "string",
+            "default": "username@name.pl"
+        },
+        "ydns_password": {
+            "type": "string",
+            "default": false
+        },
+        "ydns_hostname": {
+            "type": "string",
+            "default": "name.ydns.com"
+        },
+        "ydns_ip": {
+            "type": "string",
+            "default": "0.0.0.0"
+        },
 		"cron": {
 			"type": "boolean",
 			"default": false

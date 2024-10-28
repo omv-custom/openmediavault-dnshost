@@ -17,13 +17,13 @@ dynu_hostname=$(omv_config_get $SERVICE_XPATH"ddns_hostname")
 dt=`date '+%Y-%m-%d %H:%M:%S,000'`
 
 if [ "$noip_enabled" = "1" ]; then 
-     python3 /usr/sbin/noip-update.py --username $noip_username --password $noip_password --hostname $noip_hostname --ip $actualip
+     python3 /usr/sbin/dynamic-hostname.py -d noip --username $noip_username --password $noip_password --hostname $noip_hostname --ip $actualip
      echo $dt "INFO Run Cron Job"  >> $LOG_FILE
      echo $dt "INFO CRON run job NOIP"  >> $LOG_FILE
 fi
 
 if [ "$dynu_enabled" = "1" ]; then
-     python3 /usr/sbin/dynuddns-update.py --username $dynu_username --password $dynu_password --hostname $dynu_hostname --ip $actualip
+     python3 /usr/sbin/dynamic-hostname.py -d dynu --username $dynu_username --password $dynu_password --hostname $dynu_hostname --ip $actualip
      echo $dt "INFO Run Cron Job"  >> $LOG_FILE
      echo $dt "INFO CRON run job DYNU DNS"  >> $LOG_FILE
 fi
