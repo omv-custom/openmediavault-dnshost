@@ -3,7 +3,7 @@
 	"id": "conf.system.network.dnshost",
 	"title": "DNS HOST",
 	"queryinfo": {
-		"xpath": "//system/network/dnshost",
+		"xpath": "//system/network/dnshosts",
 		"iterable": false
 	},
 	"properties": {
@@ -50,6 +50,10 @@
         "ddns_ip": {
             "type": "string",
             "default": "0.0.0.0"
-        }
+        },
+		"cron": {
+			"type": "boolean",
+			"default": false
+		}
 	}
 }

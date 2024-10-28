@@ -40,6 +40,10 @@ if ! omv_config_exists "${SERVICE_XPATH}"; then
     omv_config_add_key "${SERVICE_XPATH}" "ddns_password" "password"
     omv_config_add_key "${SERVICE_XPATH}" "ddns_hostname" "hostname"
     omv_config_add_key "${SERVICE_XPATH}" "ddns_ip" "ip"
+    omv_config_add_key "${SERVICE_XPATH}" "cron" "false"
 fi
+
+# add or re-add cron job
+omv-dnshost-fix-cron
 
 exit 0

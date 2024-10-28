@@ -10,10 +10,10 @@ class NetworkDnshost extends \OMV\Rpc\ServiceAbstract {
         $this->registerMethod('setSettings');
         $this->registerMethod('updateIP_noip');
         $this->registerMethod('updateIP_dynuddns');
+        $this->registerMethod('doFix');
 	}
 
 	function getSettings($params, $context) {
-        // Validate the RPC caller context.
         $this->validateMethodContext($context, [ 'role' => OMV_ROLE_ADMINISTRATOR ]);
          
         $this->updateSettingsActualIp();
@@ -24,19 +24,12 @@ class NetworkDnshost extends \OMV\Rpc\ServiceAbstract {
 	}
 
 	function setSettings($params, $context) {
-        // Validate the RPC caller context.
         $this->validateMethodContext($context, ['role' => OMV_ROLE_ADMINISTRATOR]);
-        // Validate the parameters of the RPC service method.
         $db = \OMV\Config\Database::getInstance();
         $object = $db->get('conf.system.network.dnshost');
         $object->setAssoc($params);
-        // Set the configuration object.
         $db->set($object);
-        // Return the configuration object.
-        
-        #$this->updateIP_noip();
-        #$this->updateIP_dynuddns();
-        
+    
         return $object->getAssoc();
 	}
      
@@ -129,6 +122,25 @@ class NetworkDnshost extends \OMV\Rpc\ServiceAbstract {
         }
 
 		});
+    }
+    
+# CRON JOBS FIX
+    public function doFix($params, $context)
+    {
+        // Validate the RPC caller context.
+        $this->validateMethodContext($context, ['role' => OMV_ROLE_ADMINISTRATOR]);
+
+        // Create the background process.
+        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
+            use ($params) {
+                $cmd = new \OMV\System\Process('/usr/sbin/omv-dnshost-fix-cron');
+                $cmd->setRedirect2to1(true);
+                $cmdLine = $cmd->getCommandLine();
+                if (0 !== $this->exec($cmdLine, $output, $bgOutputFilename))
+                    throw new \OMV\ExecException($cmdLine, $output);
+                return $output;
+            }
+        );
     }
 
 }

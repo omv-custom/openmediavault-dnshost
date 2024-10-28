@@ -21,7 +21,7 @@ class OMVModuleDnshost extends \OMV\Engine\Module\ServiceAbstract implements \OM
 {
     public function getName()
     {
-        return "dnshost";
+        return "dnshosts";
     }
     
     public function getStatus()

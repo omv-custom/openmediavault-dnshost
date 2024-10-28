@@ -1,0 +1,29 @@
+. /usr/share/openmediavault/scripts/helper-functions
+
+SERVICE_XPATH="/config/system/network/dnshosts/"
+LOG_FILE="/var/log/dnshost/dnshost.log"
+
+noip_enabled=$(omv_config_get $SERVICE_XPATH"noip")
+noip_username=$(omv_config_get $SERVICE_XPATH"noip_username")
+noip_password=$(omv_config_get $SERVICE_XPATH"noip_password")
+noip_hostname=$(omv_config_get $SERVICE_XPATH"noip_hostname")
+actualip=$(wget -q -O- http://ipecho.net/plain)
+dynu_enabled=$(omv_config_get $SERVICE_XPATH"ddns")
+dynu_username=$(omv_config_get $SERVICE_XPATH"ddns_username")
+dynu_password=$(omv_config_get $SERVICE_XPATH"ddns_password")
+dynu_hostname=$(omv_config_get $SERVICE_XPATH"ddns_hostname")
+
+
+dt=`date '+%Y-%m-%d %H:%M:%S,000'`
+
+if [ "$noip_enabled" = "1" ]; then 
+     python3 /usr/sbin/noip-update.py --username $noip_username --password $noip_password --hostname $noip_hostname --ip $actualip
+     echo $dt "INFO Run Cron Job"  >> $LOG_FILE
+     echo $dt "INFO CRON run job NOIP"  >> $LOG_FILE
+fi
+
+if [ "$dynu_enabled" = "1" ]; then
+     python3 /usr/sbin/dynuddns-update.py --username $dynu_username --password $dynu_password --hostname $dynu_hostname --ip $actualip
+     echo $dt "INFO Run Cron Job"  >> $LOG_FILE
+     echo $dt "INFO CRON run job DYNU DNS"  >> $LOG_FILE
+fi
