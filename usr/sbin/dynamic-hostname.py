@@ -70,17 +70,17 @@ def update_ydns(username, password, hostname, ip):
     headers = {  'accept': 'text/html,application/xhtml+xml,application/xml',
               'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
               'credentials': "same-origin"}
-    response = requests.put(url, auth=(username, password), data={'ip': ip}, headers=headers)
+    response = requests.get(url, auth=(username, password), data={'ip': ip}, headers=headers)
     if response.status_code == 200:
-        logging.info("Update successful:", response.text)
+        logging.info("YDNS: Update successful: %s", response.text)
     elif response.status_code == 400:
-        logging.info("Error 400: Invalid input parameters.")
+        logging.info("YDNS: Error 400: Invalid input parameters.")
     elif response.status_code == 401:
-        logging.info("Error 401: Authentication issues.")
+        logging.info("YDNS: Error 401: Authentication issues.")
     elif response.status_code == 404:
-        logging.info("Error 404: Host not found.")
+        logging.info("YDNS: Error 404: Host not found.")
     else:
-        logging.info("Unexpected error {response.status_code}: {response.text}")
+        logging.info("YDNS: Unexpected error %s: %s", response.status_code, response.text)
     return response.text
 
 def main():
