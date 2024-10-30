@@ -32,9 +32,8 @@ data:
               name: noip_hostname
               label: _("Noip Hostname")
               value: "host.com"
-            - type: textInput
+            - type: hidden
               name: noip_ip
-              label: _("Actual IP")
           buttons:
             - template: submit
             - type: iconButton
@@ -97,9 +96,8 @@ data:
               name: ddns_hostname
               label: _("ddns Hostname")
               value: "host.com"
-            - type: textInput
+            - type: hidden
               name: ddns_ip
-              label: _("Actual IP")
           buttons:
             - template: submit
             - type: iconButton
@@ -148,9 +146,8 @@ data:
               name: ydns_hostname
               label: _("ydns Hostname")
               value: "host.com"
-            - type: textInput
+            - type: hidden
               name: ydns_ip
-              label: _("Actual IP")
           buttons:
             - template: submit
             - type: iconButton
@@ -173,6 +170,58 @@ data:
               execute:
                 type: url
                 url: "/network/dnshost"
+      - type: form
+        label: _("FreeDNS")
+        config:
+          request:
+            service: NetworkDnshost
+            get:
+              method: getSettings
+            post:
+              method: setSettings
+          fields:
+            - type: checkbox
+              name: freedns_enabled
+              label: _("Enable FreeDNS")
+              value: false
+            - type: textInput
+              name: freedns_username
+              label: _("FreeDNS Username")
+              hint: _("Enter your FreeDNS username.")
+              validators:
+                required: true
+            - type: textInput
+              name: freedns_password
+              label: _("FreeDNS Password")
+              hint: _("Enter your FreeDNS password.")
+              validators:
+                required: true
+            - type: textInput
+              name: freedns_hostname
+              label: _("FreeDNS Hostname")
+              hint: _("Enter your FreeDNS hostname.")
+              validators:
+                required: true
+            - type: hidden
+              name: freedns_ip
+          buttons:
+            - template: submit
+            - type: iconButton
+              icon: start
+              text: _("Start Update")
+              tooltip: _("Run")
+              enabledConstraints:
+                minSelected: 1
+                maxSelected: 1
+              execute:
+                type: taskDialog
+                taskDialog:
+                  config:
+                    title: _("Run job")
+                    startOnInit: true
+                    request:
+                      service: NetworkDnshost
+                      method: updateIP_freedns
       - type: form
         label: _("SettingsCron")
         config:

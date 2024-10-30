@@ -71,6 +71,26 @@
             "type": "string",
             "default": "0.0.0.0"
         },
+        "freedns_enabled": {
+			"type": "boolean",
+			"default": false
+		},
+        "freedns_username": {
+            "type": "string",
+            "default": "username"
+        },
+        "freedns_password": {
+            "type": "string",
+            "default": false
+        },
+        "freedns_hostname": {
+            "type": "string",
+            "default": "name.mooo.com"
+        },
+        "freedns_ip": {
+            "type": "string",
+            "default": "0.0.0.0"
+        },
 		"cron": {
 			"type": "boolean",
 			"default": false

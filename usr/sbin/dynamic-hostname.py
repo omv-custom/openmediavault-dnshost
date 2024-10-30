@@ -83,9 +83,15 @@ def update_ydns(username, password, hostname, ip):
         logging.info("YDNS: Unexpected error %s: %s", response.status_code, response.text)
     return response.text
 
+def update_freedns(username, password, hostname, ip):
+    url = f"http://{username}:{password}@freedns.afraid.org/nic/update?hostname={hostname}&myip={ip}"
+    response = requests.get(url)
+    logging.info("FreeDns: %s - %s", response.status_code, response.text)
+    return response.status_code, response.text
+
 def main():
     parser = argparse.ArgumentParser(description="Update DNS records for No-IP, DynuDNS, DuckDNS, or YDNS.")
-    parser.add_argument('-d', '--dns', required=True, choices=['noip', 'dynu', 'duck', 'ydns'], help='DNS service to update')
+    parser.add_argument('-d', '--dns', required=True, choices=['noip', 'dynu', 'duck', 'ydns', 'freedns'], help='DNS service to update')
     parser.add_argument('--username', help='Username for No-IP, DynuDNS, or YDNS')
     parser.add_argument('--password', help='Password for No-IP, DynuDNS, or YDNS')
     parser.add_argument('--token', help='Token for DuckDNS')
@@ -93,6 +99,14 @@ def main():
     parser.add_argument('--ip', required=True, help='The IP address to set')
 
     args = parser.parse_args()
+    
+    if not args.ip:
+        try:
+            args.ip = requests.get('https://api.ipify.org').text
+            logging.info(f"Detected IP: {args.ip}")
+        except Exception as e:
+            logging.error(f"Could not retrieve current IP: {e}")
+            return
 
     if args.dns == 'noip':
         if not args.username or not args.password:
@@ -109,6 +123,7 @@ def main():
     elif args.dns == 'duck':
         if not args.token:
             logging.info("Token is required for DuckDNS.")
+            
             sys.exit(1)
         result = update_duckdns(args.token, args.hostname, args.ip)
 
@@ -117,6 +132,12 @@ def main():
             logging.info("Username and password are required for YDNS.")
             sys.exit(1)
         result = update_ydns(args.username, args.password, args.hostname, args.ip)
+        
+    elif args.dns == 'freedns':
+        if not args.username or not args.password:
+            logging.error("Username and password are required for FreeDNS.")
+            return
+        result = update_freedns(args.username, args.password, args.hostname, args.ip)
 
     print(result)
 

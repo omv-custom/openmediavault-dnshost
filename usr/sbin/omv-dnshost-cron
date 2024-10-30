@@ -18,6 +18,11 @@ ydns_username=$(omv_config_get $SERVICE_XPATH"ydns_username")
 ydns_password=$(omv_config_get $SERVICE_XPATH"ydns_password")
 ydns_hostname=$(omv_config_get $SERVICE_XPATH"ydns_hostname")
 
+freedns_enabled=$(omv_config_get $SERVICE_XPATH"freedns_enabled")
+freedns_username=$(omv_config_get $SERVICE_XPATH"freedns_username")
+freedns_password=$(omv_config_get $SERVICE_XPATH"freedns_password")
+freedns_hostname=$(omv_config_get $SERVICE_XPATH"freedns_hostname")
+
 
 dt=`date '+%Y-%m-%d %H:%M:%S,000'`
 
@@ -37,4 +42,10 @@ if [ "$ydns_enabled" = "1" ]; then
      python3 /usr/sbin/dynamic-hostname.py -d dynu --username $ydns_username --password $ydns_password --hostname $ydns_hostname --ip $actualip
      echo $dt "INFO Run Cron Job"  >> $LOG_FILE
      echo $dt "INFO CRON run job YDNS"  >> $LOG_FILE
+fi
+
+if [ "$freedns_enabled" = "1" ]; then
+     python3 /usr/sbin/dynamic-hostname.py -d dynu --username $freedns_username --password $freedns_password --hostname $freedns_hostname --ip $actualip
+     echo $dt "INFO Run Cron Job"  >> $LOG_FILE
+     echo $dt "INFO CRON run job FreeDns"  >> $LOG_FILE
 fi
