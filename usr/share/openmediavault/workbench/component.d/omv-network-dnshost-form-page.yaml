@@ -24,7 +24,7 @@ data:
               name: noip_username
               label: _("Noip Username")
               value: "username"
-            - type: textInput
+            - type: passwordInput
               name: noip_password
               label: _("Noip Password")
               value: "password"
@@ -88,7 +88,7 @@ data:
               name: ddns_username
               label: _("ddns Username")
               value: "username"
-            - type: textInput
+            - type: passwordInput
               name: ddns_password
               label: _("ddns Password")
               value: "password"
@@ -138,7 +138,7 @@ data:
               name: ydns_username
               label: _("ydns Username")
               value: "username"
-            - type: textInput
+            - type: passwordInput
               name: ydns_password
               label: _("ydns Password")
               value: "password"
@@ -190,7 +190,7 @@ data:
               hint: _("Enter your FreeDNS username.")
               validators:
                 required: true
-            - type: textInput
+            - type: passwordInput
               name: freedns_password
               label: _("FreeDNS Password")
               hint: _("Enter your FreeDNS password.")

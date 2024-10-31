@@ -11,3 +11,9 @@ DEBIAN/_notes/dwsync.xml
 usr/.DS_Store
 usr/sbin/_notes/dwsync.xml
 usr/.DS_Store
+usr/share/openmediavault/confdb/create.d/_notes/dwsync.xml
+usr/share/openmediavault/engined/module/_notes/dwsync.xml
+usr/share/openmediavault/engined/rpc/_notes/dwsync.xml
+usr/share/openmediavault/workbench/component.d/_notes/dwsync.xml
+usr/.DS_Store
+usr/.DS_Store
