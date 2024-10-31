@@ -8,6 +8,7 @@ noip_username=$(omv_config_get $SERVICE_XPATH"noip_username")
 noip_password=$(omv_config_get $SERVICE_XPATH"noip_password")
 noip_hostname=$(omv_config_get $SERVICE_XPATH"noip_hostname")
 actualip=$(wget -q -O- http://ipecho.net/plain)
+savedip=$(omv_config_get $SERVICE_XPATH"noip_ip")
 dynu_enabled=$(omv_config_get $SERVICE_XPATH"ddns")
 dynu_username=$(omv_config_get $SERVICE_XPATH"ddns_username")
 dynu_password=$(omv_config_get $SERVICE_XPATH"ddns_password")
@@ -26,26 +27,36 @@ freedns_hostname=$(omv_config_get $SERVICE_XPATH"freedns_hostname")
 
 dt=`date '+%Y-%m-%d %H:%M:%S,000'`
 
+if [ "$actualip" = "$savedip" ]; then
+     echo $dt "Ip Is Actual" >> $LOG_FILE
+else
+     echo $dt "IP IS CHANGED NEW IP $actualip" >> $LOG_FILE
+fi
+
 if [ "$noip_enabled" = "1" ]; then 
      python3 /usr/sbin/dynamic-hostname.py -d noip --username $noip_username --password $noip_password --hostname $noip_hostname --ip $actualip
      echo $dt "INFO Run Cron Job"  >> $LOG_FILE
      echo $dt "INFO CRON run job NOIP"  >> $LOG_FILE
+     echo "NOIP"
 fi
 
 if [ "$dynu_enabled" = "1" ]; then
      python3 /usr/sbin/dynamic-hostname.py -d dynu --username $dynu_username --password $dynu_password --hostname $dynu_hostname --ip $actualip
      echo $dt "INFO Run Cron Job"  >> $LOG_FILE
      echo $dt "INFO CRON run job DYNU DNS"  >> $LOG_FILE
+     echo "DYNU"
 fi
 
 if [ "$ydns_enabled" = "1" ]; then
-     python3 /usr/sbin/dynamic-hostname.py -d dynu --username $ydns_username --password $ydns_password --hostname $ydns_hostname --ip $actualip
+     python3 /usr/sbin/dynamic-hostname.py -d ydns --username $ydns_username --password $ydns_password --hostname $ydns_hostname --ip $actualip
      echo $dt "INFO Run Cron Job"  >> $LOG_FILE
      echo $dt "INFO CRON run job YDNS"  >> $LOG_FILE
+     echo "YDNS"
 fi
 
 if [ "$freedns_enabled" = "1" ]; then
-     python3 /usr/sbin/dynamic-hostname.py -d dynu --username $freedns_username --password $freedns_password --hostname $freedns_hostname --ip $actualip
+     python3 /usr/sbin/dynamic-hostname.py -d freedns --username $freedns_username --password $freedns_password --hostname $freedns_hostname --ip $actualip
      echo $dt "INFO Run Cron Job"  >> $LOG_FILE
      echo $dt "INFO CRON run job FreeDns"  >> $LOG_FILE
+     echo "FREEDNS"
 fi
