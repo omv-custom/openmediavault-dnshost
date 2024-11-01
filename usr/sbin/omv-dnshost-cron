@@ -31,6 +31,7 @@ if [ "$actualip" = "$savedip" ]; then
      echo $dt "Ip Is Actual" >> $LOG_FILE
 else
      echo $dt "IP IS CHANGED NEW IP $actualip" >> $LOG_FILE
+     omv_config_update "${SERVICE_XPATH}/noip_ip" "${actualip}"
 fi
 
 if [ "$noip_enabled" = "1" ]; then 

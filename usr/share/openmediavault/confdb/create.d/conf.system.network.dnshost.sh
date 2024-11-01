@@ -27,6 +27,7 @@ SERVICE_XPATH_NAME="dnshosts"
 SERVICE_XPATH="/config/system/network/${SERVICE_XPATH_NAME}"
 
 if ! omv_config_exists "${SERVICE_XPATH}"; then
+    ip="$(wget -q -O- http://ipecho.net/plain)"
     omv_config_add_node "/config/system/network" "${SERVICE_XPATH_NAME}"
     omv_config_add_key "${SERVICE_XPATH}" "enable" "0"
     omv_config_add_key "${SERVICE_XPATH}" "noip" "false"
@@ -36,23 +37,23 @@ if ! omv_config_exists "${SERVICE_XPATH}"; then
     omv_config_add_key "${SERVICE_XPATH}" "noip_username" "username"
     omv_config_add_key "${SERVICE_XPATH}" "noip_password" "password"
     omv_config_add_key "${SERVICE_XPATH}" "noip_hostname" "hostname"
-    omv_config_add_key "${SERVICE_XPATH}" "noip_ip" "ip"
+    omv_config_add_key "${SERVICE_XPATH}" "noip_ip" "${ip}"
     
     omv_config_add_key "${SERVICE_XPATH}" "ddns_username" "username"
     omv_config_add_key "${SERVICE_XPATH}" "ddns_password" "password"
     omv_config_add_key "${SERVICE_XPATH}" "ddns_hostname" "hostname"
-    omv_config_add_key "${SERVICE_XPATH}" "ddns_ip" "ip"
+    omv_config_add_key "${SERVICE_XPATH}" "ddns_ip" "${ip}"
     
     omv_config_add_key "${SERVICE_XPATH}" "ydns_username" "username"
     omv_config_add_key "${SERVICE_XPATH}" "ydns_password" "password"
     omv_config_add_key "${SERVICE_XPATH}" "ydns_hostname" "hostname"
-    omv_config_add_key "${SERVICE_XPATH}" "ydns_ip" "ip"
+    omv_config_add_key "${SERVICE_XPATH}" "ydns_ip" "${ip}"
     omv_config_add_key "${SERVICE_XPATH}" "cron" "false"
     
     omv_config_add_key "${SERVICE_XPATH}" "freedns_username" "username"
     omv_config_add_key "${SERVICE_XPATH}" "freedns_password" "password"
     omv_config_add_key "${SERVICE_XPATH}" "freedns_hostname" "hostname"
-    omv_config_add_key "${SERVICE_XPATH}" "freedns_ip" "ip"
+    omv_config_add_key "${SERVICE_XPATH}" "freedns_ip" "${ip}"
 fi
 
 # add or re-add cron job
