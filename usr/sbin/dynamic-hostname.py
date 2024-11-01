@@ -6,7 +6,7 @@ import argparse
 import sys
 
 # Set up logging
-logging.basicConfig(level=logging.INFO, filename="/var/log/dnshost/dnshost.log", format="%(asctime)s %(levelname)s %(message)s")
+logging.basicConfig(level=logging.INFO, filename="/var/log/dnshost/dnshost.log", format="%(asctime)s %(levelname)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
 def update_noip(username, password, hostname, ip):
     url = f"https://dynupdate.no-ip.com/nic/update?hostname={hostname}&myip={ip}"

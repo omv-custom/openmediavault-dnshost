@@ -25,7 +25,7 @@ freedns_password=$(omv_config_get $SERVICE_XPATH"freedns_password")
 freedns_hostname=$(omv_config_get $SERVICE_XPATH"freedns_hostname")
 
 
-dt=`date '+%Y-%m-%d %H:%M:%S,000'`
+dt=`date '+%Y-%m-%d %H:%M:%S'`
 
 if [ "$actualip" = "$savedip" ]; then
      echo $dt "Ip Is Actual" >> $LOG_FILE

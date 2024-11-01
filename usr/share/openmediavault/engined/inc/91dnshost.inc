@@ -24,7 +24,7 @@ require_once("openmediavault/functions.inc");
 \OMV\System\LogFileSpec::registerSpecification("dnshost", [
   "filename" => "dnshost",
   "filepath" => "/var/log/dnshost/dnshost.log",
-  "regex" => "/^(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2},\d{3})\s+(.+)$/",
+  "regex" => "/^(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})\s+(.+)$/",
   "columns" => [
 	  "ts" => [
 		  "index" => 1,
