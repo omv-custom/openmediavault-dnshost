@@ -8,7 +8,7 @@ actualip=$(wget -q -O- http://ipecho.net/plain)
 savedip=$(omv_config_get $SERVICE_XPATH"noip_ip")
 dynu_enabled=$(omv_config_get $SERVICE_XPATH"ddns")
 ydns_enabled=$(omv_config_get $SERVICE_XPATH"ydns")
-freedns_enabled=$(omv_config_get $SERVICE_XPATH"freedns_enabled")
+freedns_enabled=$(omv_config_get $SERVICE_XPATH"freedns")
 
 
 dt=`date '+%Y-%m-%d %H:%M:%S'`

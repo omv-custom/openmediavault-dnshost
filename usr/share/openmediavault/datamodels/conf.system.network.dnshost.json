@@ -71,7 +71,7 @@
             "type": "string",
             "default": "0.0.0.0"
         },
-        "freedns_enabled": {
+        "freedns": {
 			"type": "boolean",
 			"default": false
 		},

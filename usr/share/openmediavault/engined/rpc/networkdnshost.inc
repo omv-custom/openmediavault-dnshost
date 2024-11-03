@@ -8,10 +8,7 @@ class NetworkDnshost extends \OMV\Rpc\ServiceAbstract {
 	public function initialize() {
         $this->registerMethod('getSettings');
         $this->registerMethod('setSettings');
-        $this->registerMethod('updateIP_noip');
-        $this->registerMethod('updateIP_dynuddns');
-        $this->registerMethod('updateIP_ydns');
-        $this->registerMethod('updateIP_freedns');
+        $this->registerMethod('updateIP');
         $this->registerMethod('doFix');
 	}
 
@@ -56,12 +53,13 @@ class NetworkDnshost extends \OMV\Rpc\ServiceAbstract {
         $db->set($object);
     }
     
-    function updateIP_noip() {
+    function updateIP($params) {
         return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
-		  use ($object) {
+		  use ($object, $params) {
         $db = \OMV\Config\Database::getInstance();
+        $provider = $params['provider'];
         $object = $db->get('conf.system.network.dnshost');
-        if (FALSE === $object->get("noip")) {
+        if (FALSE === $object->get("".$provider."") ) {
               throw new \OMV\Exception(
 				"Failed to run scheduled job because the service is disabled.");
         } else {
@@ -69,121 +67,9 @@ class NetworkDnshost extends \OMV\Rpc\ServiceAbstract {
 			$cmdArgs[] = "--shell";
 			$cmdArgs[] = "--non-interactive";
 			$cmdArgs[] = "--";
-			$cmdArgs[] = build_path(DIRECTORY_SEPARATOR, \OMV\Environment::get("OMV_CRONSCRIPTS_DIR"), sprintf("noip-%s", 100));
-             
-             $username = $object->get("noip_username");
-             $password = $object->get("noip_password");
-             $hostname = $object->get("noip_hostname");
-             $ip = $object->get("noip_ip");
-             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d noip");
-             $cmd->setRedirect2to1();
-             $cmd->execute($output);
-             $cmdLine = $cmd->getCommandLine();
-             $stats = implode("\n", $output);
-            
-             $exitStatus = $this->exec($cmdLine, $output, $bgOutputFilename);
-             
-             if (0 !== $exitStatus)
-				throw new \OMV\ExecException($cmdLine, $output, $exitStatus);
-            
-            return $output;
-        }
+			$cmdArgs[] = build_path(DIRECTORY_SEPARATOR, \OMV\Environment::get("OMV_CRONSCRIPTS_DIR"), sprintf("$provider-%s", 100));
 
-		});
-    }
-    
-    function updateIP_dynuddns() {
-        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
-		  use ($object) {
-        $db = \OMV\Config\Database::getInstance();
-        $object = $db->get('conf.system.network.dnshost');
-        if (FALSE === $object->get("ddns")) {
-              throw new \OMV\Exception(
-				"Failed to run scheduled job because the service is disabled.");
-        } else {
-            $cmdArgs = [];
-			$cmdArgs[] = "--shell";
-			$cmdArgs[] = "--non-interactive";
-			$cmdArgs[] = "--";
-			$cmdArgs[] = build_path(DIRECTORY_SEPARATOR, \OMV\Environment::get("OMV_CRONSCRIPTS_DIR"), sprintf("ddns-%s", 100));
-             
-             $username = $object->get("ddns_username");
-             $password = $object->get("ddns_password");
-             $hostname = $object->get("ddns_hostname");
-             $ip = $object->get("ddns_ip");
-             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d dynu");
-             $cmd->setRedirect2to1();
-             $cmd->execute($output);
-             $cmdLine = $cmd->getCommandLine();
-             $stats = implode("\n", $output);
-            
-             $exitStatus = $this->exec($cmdLine, $output, $bgOutputFilename);
-             
-             if (0 !== $exitStatus)
-				throw new \OMV\ExecException($cmdLine, $output, $exitStatus);
-            
-            return $output;
-        }
-
-		});
-    }
-    
-    function updateIP_ydns() {
-        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
-		  use ($object) {
-        $db = \OMV\Config\Database::getInstance();
-        $object = $db->get('conf.system.network.dnshost');
-        if (FALSE === $object->get("ddns")) {
-              throw new \OMV\Exception(
-				"Failed to run scheduled job because the service is disabled.");
-        } else {
-            $cmdArgs = [];
-			$cmdArgs[] = "--shell";
-			$cmdArgs[] = "--non-interactive";
-			$cmdArgs[] = "--";
-			$cmdArgs[] = build_path(DIRECTORY_SEPARATOR, \OMV\Environment::get("OMV_CRONSCRIPTS_DIR"), sprintf("ddns-%s", 100));
-             
-             $username = $object->get("ydns_username");
-             $password = $object->get("ydns_password");
-             $hostname = $object->get("ydns_hostname");
-             $ip = $object->get("ydns_ip");
-             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d ydns");
-             $cmd->setRedirect2to1();
-             $cmd->execute($output);
-             $cmdLine = $cmd->getCommandLine();
-             $stats = implode("\n", $output);
-            
-             $exitStatus = $this->exec($cmdLine, $output, $bgOutputFilename);
-             
-             if (0 !== $exitStatus)
-				throw new \OMV\ExecException($cmdLine, $output, $exitStatus);
-            
-            return $output;
-        }
-
-		});
-    }
-    
-    function updateIP_freedns() {
-        return $this->execBgProc(function($bgStatusFilename, $bgOutputFilename)
-		  use ($object) {
-        $db = \OMV\Config\Database::getInstance();
-        $object = $db->get('conf.system.network.dnshost');
-        if (FALSE === $object->get("freedns_enabled")) {
-              throw new \OMV\Exception(
-				"Failed to run scheduled job because the service is disabled.");
-        } else {
-            $cmdArgs = [];
-			$cmdArgs[] = "--shell";
-			$cmdArgs[] = "--non-interactive";
-			$cmdArgs[] = "--";
-			$cmdArgs[] = build_path(DIRECTORY_SEPARATOR, \OMV\Environment::get("OMV_CRONSCRIPTS_DIR"), sprintf("ddns-%s", 100));
-             
-             $username = $object->get("freedns_username");
-             $password = $object->get("freedns_password");
-             $hostname = $object->get("freedns_hostname");
-             $ip = $object->get("freedns_ip");
-             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d freedns");
+             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d $provider");
              $cmd->setRedirect2to1();
              $cmd->execute($output);
              $cmdLine = $cmd->getCommandLine();

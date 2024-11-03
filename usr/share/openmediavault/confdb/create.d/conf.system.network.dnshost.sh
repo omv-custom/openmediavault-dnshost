@@ -23,7 +23,7 @@ set -e
 
 . /usr/share/openmediavault/scripts/helper-functions
 
-SERVICE_XPATH_NAME="dnshosts"
+SERVICE_XPATH_NAME="dnshost"
 SERVICE_XPATH="/config/system/network/${SERVICE_XPATH_NAME}"
 
 if ! omv_config_exists "${SERVICE_XPATH}"; then
@@ -33,7 +33,7 @@ if ! omv_config_exists "${SERVICE_XPATH}"; then
     omv_config_add_key "${SERVICE_XPATH}" "noip" "false"
     omv_config_add_key "${SERVICE_XPATH}" "ddns" "false"
     omv_config_add_key "${SERVICE_XPATH}" "ydns" "false"
-    omv_config_add_key "${SERVICE_XPATH}" "freedns_enabled" "false"
+    omv_config_add_key "${SERVICE_XPATH}" "freedns" "false"
     omv_config_add_key "${SERVICE_XPATH}" "noip_username" "username"
     omv_config_add_key "${SERVICE_XPATH}" "noip_password" "password"
     omv_config_add_key "${SERVICE_XPATH}" "noip_hostname" "hostname"
