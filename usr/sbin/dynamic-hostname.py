@@ -1,145 +1,123 @@
-#http://username:password@dynupdate.no-ip.com/nic/update?hostname=mytest.example.com&myip=192.0.2.25
-# update.py
+#!/usr/bin/env python3
+
 import requests
 import logging
 import argparse
 import sys
+import subprocess
+import json
+import os
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, filename="/var/log/dnshost/dnshost.log", format="%(asctime)s %(levelname)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 
-def update_noip(username, password, hostname, ip):
-    url = f"https://dynupdate.no-ip.com/nic/update?hostname={hostname}&myip={ip}"
-    response = requests.get(url, auth=(username, password))
-    
-    if "nochg" in response.text:
-        logging.info("NOIP: Current IP address, no update performed.")
-    
-    if "good" in response.text:
-        logging.info("NOIP: NOIP: IP updated: %s" % response.text)
-    
-    if "nohost" in response.text:
-        logging.info("Hostname does not exist for the specified account.")
-    
-    if "badauth" in response.text:
-        logging.info("NOIP: Invalid username or password.")
-    
-    if "badagent" in response.text:
-        logging.info("NOIP: Client disabled.")
-    
-    if "abuse" in response.text:
-        logging.info("NOIP: Username blocked due to abuse.")
-    
-    if "911" in response.text:
-        logging.info("NOIP: Unexpected error.")
-    return response.text
+def omv_config_get():
+    try:
+        result = subprocess.run(['omv-confdbadm', 'read', 'conf.system.network.dnshost'], capture_output=True, text=True, check=True)
+        return json.loads(result.stdout)
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Error getting config: {e}")
+        return None
+    except json.JSONDecodeError as e:
+        logging.error(f"Error decoding JSON: {e}")
+        return None
 
-def update_dynudns(username, password, hostname, ip):
-    url = f"https://api.dynu.com/nic/update?hostname={hostname}&myip={ip}&password={password}"
-    response = requests.get(url, auth=(username, password))
-    
-    if "nochg" in response.text:
-        logging.info("DynuDns: Current IP address, no update performed.")
-    
-    if "good" in response.text:
-        logging.info("DynuDns: IP updated: %s" % response.text)
-    
-    if "nohost" in response.text:
-        logging.info("DynuDns: Hostname does not exist for the specified account.")
-    
-    if "badauth" in response.text:
-        logging.info("DynuDns: Invalid username or password.")
-    
-    if "badagent" in response.text:
-        logging.info("DynuDns: Client disabled.")
-    
-    if "abuse" in response.text:
-        logging.info("DynuDns: Username blocked due to abuse.")
-    
-    if "911" in response.text:
-        logging.info("DynuDns: Unexpected error.")
-    return response.text
+def omv_config_update(config):
+    try:
+        json_config = json.dumps(config)
+        subprocess.run(['omv-confdbadm', 'update', 'conf.system.network.dnshost', json_config], check=True)
+        return True
+    except subprocess.CalledProcessError as e:
+        logging.error(f"Error updating config: {e}")
+        return False
 
-def update_duckdns(token, hostname, ip):
-    url = f"https://www.duckdns.org/update/{token}/{hostname}/{ip}"
-    response = requests.get(url)
-    return response.text
+def update_dns(provider):
+    config = omv_config_get()
 
-def update_ydns(username, password, hostname, ip):
-    url = f"http://ydns.io/api/v1/update/?host={hostname}"
-    headers = {  'accept': 'text/html,application/xhtml+xml,application/xml',
-              'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
-              'credentials': "same-origin"}
-    response = requests.get(url, auth=(username, password), data={'ip': ip}, headers=headers)
-    if response.status_code == 200:
-        logging.info("YDNS: Update successful: %s", response.text)
-    elif response.status_code == 400:
-        logging.info("YDNS: Error 400: Invalid input parameters.")
-    elif response.status_code == 401:
-        logging.info("YDNS: Error 401: Authentication issues.")
-    elif response.status_code == 404:
-        logging.info("YDNS: Error 404: Host not found.")
-    else:
-        logging.info("YDNS: Unexpected error %s: %s", response.status_code, response.text)
-    return response.text
+    username = config.get(f"{provider}_username")
+    password = config.get(f"{provider}_password")
+    hostname = config.get(f"{provider}_hostname")
 
-def update_freedns(username, password, hostname, ip):
-    url = f"http://{username}:{password}@freedns.afraid.org/nic/update?hostname={hostname}&myip={ip}"
-    response = requests.get(url)
-    logging.info("FreeDns: %s - %s", response.status_code, response.text)
-    return response.status_code, response.text
+    if not all([username, password, hostname]):
+        logging.error(f"{provider.upper()}: Missing configuration")
+        return "configuration error", 0
+
+    try:
+        ip = requests.get('https://api.ipify.org', timeout=30).text
+        logging.info(f"Detected IP: {ip}")
+    except Exception as e:
+        logging.error(f"Could not retrieve current IP: {e}")
+        return str(e), 0
+
+    provider_urls = {
+        'noip': f"https://dynupdate.no-ip.com/nic/update?hostname={hostname}&myip={ip}",
+        'ddns': f"https://api.dynu.com/nic/update?hostname={hostname}&myip={ip}&password={password}",
+        'ydns': f"http://ydns.io/api/v1/update/?host={hostname}",
+        'freedns': f"http://{username}:{password}@freedns.afraid.org/nic/update?hostname={hostname}&myip={ip}"
+    }
+
+    headers = {
+        'User-Agent': 'OpenMediaVault-DynamicDNS/1.0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml'
+    }
+
+    try:
+        if provider == 'ydns':
+            response = requests.get(provider_urls[provider], auth=(username, password), headers=headers, data={'ip': ip}, timeout=30)
+        else:
+            response = requests.get(provider_urls[provider], auth=(username, password), headers=headers, timeout=30)
+
+        content = response.text.strip()
+        status_code = response.status_code
+
+        if status_code == 200 or "good" in content.lower():
+            config[f"{provider}_ip"] = ip
+            omv_config_update(config)
+
+        status_messages = {
+            "nochg": f"{provider.upper()}: IP unchanged",
+            "good": f"{provider.upper()}: IP updated successfully",
+            "nohost": f"{provider.upper()}: Hostname not found",
+            "badauth": f"{provider.upper()}: Authentication failed",
+            "abuse": f"{provider.upper()}: Account abuse detected",
+            "911": f"{provider.upper()}: Provider service error"
+        }
+
+        for key, message in status_messages.items():
+            if key in content.lower():
+                logging.info(message)
+                return message, status_code
+
+        if status_code == 200:
+            message = f"{provider.upper()}: Update successful"
+            logging.info(message)
+            return message, status_code
+        else:
+            message = f"{provider.upper()}: Unexpected response - {content}"
+            logging.warning(message)
+            return message, status_code
+
+    except requests.RequestException as e:
+        message = f"{provider.upper()}: Request failed - {str(e)}"
+        logging.error(message)
+        return message, 0
 
 def main():
-    parser = argparse.ArgumentParser(description="Update DNS records for No-IP, DynuDNS, DuckDNS, or YDNS.")
-    parser.add_argument('-d', '--dns', required=True, choices=['noip', 'dynu', 'duck', 'ydns', 'freedns'], help='DNS service to update')
-    parser.add_argument('--username', help='Username for No-IP, DynuDNS, or YDNS')
-    parser.add_argument('--password', help='Password for No-IP, DynuDNS, or YDNS')
-    parser.add_argument('--token', help='Token for DuckDNS')
-    parser.add_argument('--hostname', required=True, help='The hostname to update')
-    parser.add_argument('--ip', required=True, help='The IP address to set')
-
+    parser = argparse.ArgumentParser(description="Update DNS records for various providers")
+    parser.add_argument('-d', '--dns', required=True, choices=['noip', 'ddns', 'ydns', 'freedns'], help='DNS service to update')
     args = parser.parse_args()
+
+    result, status_code = update_dns(args.dns)
     
-    if not args.ip:
-        try:
-            args.ip = requests.get('https://api.ipify.org').text
-            logging.info(f"Detected IP: {args.ip}")
-        except Exception as e:
-            logging.error(f"Could not retrieve current IP: {e}")
-            return
-
-    if args.dns == 'noip':
-        if not args.username or not args.password:
-            logging.info("Username and password are required for No-IP.")
-            sys.exit(1)
-        result = update_noip(args.username, args.password, args.hostname, args.ip)
-
-    elif args.dns == 'dynu':
-        if not args.username or not args.password:
-            logging.info("Username and password are required for DynuDNS.")
-            sys.exit(1)
-        result = update_dynudns(args.username, args.password, args.hostname, args.ip)
-
-    elif args.dns == 'duck':
-        if not args.token:
-            logging.info("Token is required for DuckDNS.")
-            
-            sys.exit(1)
-        result = update_duckdns(args.token, args.hostname, args.ip)
-
-    elif args.dns == 'ydns':
-        if not args.username or not args.password:
-            logging.info("Username and password are required for YDNS.")
-            sys.exit(1)
-        result = update_ydns(args.username, args.password, args.hostname, args.ip)
-        
-    elif args.dns == 'freedns':
-        if not args.username or not args.password:
-            logging.error("Username and password are required for FreeDNS.")
-            return
-        result = update_freedns(args.username, args.password, args.hostname, args.ip)
-
-    print(result)
+    if status_code == 200 or "good" in str(result).lower():
+        print(f"Successfully updated {args.dns}")
+        sys.exit(0)
+    else:
+        print(f"Update failed for {args.dns}: {result}")
+        sys.exit(1)
 
 if __name__ == '__main__':
+    if os.geteuid() != 0:
+        print("This script must be run as root")
+        sys.exit(1)
     main()

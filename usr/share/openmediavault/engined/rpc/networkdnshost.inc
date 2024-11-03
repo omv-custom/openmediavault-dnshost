@@ -75,7 +75,7 @@ class NetworkDnshost extends \OMV\Rpc\ServiceAbstract {
              $password = $object->get("noip_password");
              $hostname = $object->get("noip_hostname");
              $ip = $object->get("noip_ip");
-             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d noip --username $username --password $password --hostname $hostname --ip $ip");
+             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d noip");
              $cmd->setRedirect2to1();
              $cmd->execute($output);
              $cmdLine = $cmd->getCommandLine();
@@ -111,7 +111,7 @@ class NetworkDnshost extends \OMV\Rpc\ServiceAbstract {
              $password = $object->get("ddns_password");
              $hostname = $object->get("ddns_hostname");
              $ip = $object->get("ddns_ip");
-             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d dynu --username $username --password $password --hostname $hostname --ip $ip");
+             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d dynu");
              $cmd->setRedirect2to1();
              $cmd->execute($output);
              $cmdLine = $cmd->getCommandLine();
@@ -147,7 +147,7 @@ class NetworkDnshost extends \OMV\Rpc\ServiceAbstract {
              $password = $object->get("ydns_password");
              $hostname = $object->get("ydns_hostname");
              $ip = $object->get("ydns_ip");
-             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d ydns --username $username --password $password --hostname $hostname --ip $ip");
+             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d ydns");
              $cmd->setRedirect2to1();
              $cmd->execute($output);
              $cmdLine = $cmd->getCommandLine();
@@ -183,7 +183,7 @@ class NetworkDnshost extends \OMV\Rpc\ServiceAbstract {
              $password = $object->get("freedns_password");
              $hostname = $object->get("freedns_hostname");
              $ip = $object->get("freedns_ip");
-             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d freedns --username $username --password $password --hostname $hostname --ip $ip");
+             $cmd = new \OMV\System\Process("python3 /usr/sbin/dynamic-hostname.py", "-d freedns");
              $cmd->setRedirect2to1();
              $cmd->execute($output);
              $cmdLine = $cmd->getCommandLine();
