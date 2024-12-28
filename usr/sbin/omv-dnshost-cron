@@ -6,7 +6,7 @@ LOG_FILE="/var/log/dnshost/dnshost.log"
 noip_enabled=$(omv_config_get $SERVICE_XPATH"noip")
 actualip=$(wget -q -O- http://ipecho.net/plain)
 savedip=$(omv_config_get $SERVICE_XPATH"noip_ip")
-dynu_enabled=$(omv_config_get $SERVICE_XPATH"dynu")
+dynu_enabled=$(omv_config_get $SERVICE_XPATH"ddns")
 ydns_enabled=$(omv_config_get $SERVICE_XPATH"ydns")
 freedns_enabled=$(omv_config_get $SERVICE_XPATH"freedns")
 
