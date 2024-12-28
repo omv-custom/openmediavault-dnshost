@@ -3,7 +3,7 @@
 	"id": "conf.system.network.dnshost",
 	"title": "DNS HOST",
 	"queryinfo": {
-		"xpath": "//system/network/dnshosts",
+		"xpath": "//system/network/dnshost",
 		"iterable": false
 	},
 	"properties": {
