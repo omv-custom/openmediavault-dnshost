@@ -1,0 +1,99 @@
+{
+	"type": "config",
+	"id": "conf.system.network.dnshost",
+	"title": "DNS HOST",
+	"queryinfo": {
+		"xpath": "//system/network/dnshost",
+		"iterable": false
+	},
+	"properties": {
+		"enable": {
+			"type": "boolean",
+			"default": false
+		},
+		"noip": {
+			"type": "boolean",
+			"default": false
+		},
+        "noip_username": {
+            "type": "string",
+            "default": "username@name.pl"
+        },
+        "noip_password": {
+            "type": "string",
+            "default": false
+        },
+        "noip_hostname": {
+            "type": "string",
+            "default": "name.noip.com"
+        },
+        "noip_ip": {
+            "type": "string",
+            "default": "0.0.0.0"
+        },
+		"ddns": {
+			"type": "boolean",
+			"default": false
+		},
+        "ddns_username": {
+            "type": "string",
+            "default": "username@name.pl"
+        },
+        "ddns_password": {
+            "type": "string",
+            "default": false
+        },
+        "ddns_hostname": {
+            "type": "string",
+            "default": "name.ddns.com"
+        },
+        "ddns_ip": {
+            "type": "string",
+            "default": "0.0.0.0"
+        },
+        "ydns": {
+			"type": "boolean",
+			"default": false
+		},
+        "ydns_username": {
+            "type": "string",
+            "default": "username@name.pl"
+        },
+        "ydns_password": {
+            "type": "string",
+            "default": false
+        },
+        "ydns_hostname": {
+            "type": "string",
+            "default": "name.ydns.com"
+        },
+        "ydns_ip": {
+            "type": "string",
+            "default": "0.0.0.0"
+        },
+        "freedns": {
+			"type": "boolean",
+			"default": false
+		},
+        "freedns_username": {
+            "type": "string",
+            "default": "username"
+        },
+        "freedns_password": {
+            "type": "string",
+            "default": false
+        },
+        "freedns_hostname": {
+            "type": "string",
+            "default": "name.mooo.com"
+        },
+        "freedns_ip": {
+            "type": "string",
+            "default": "0.0.0.0"
+        },
+		"cron": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}

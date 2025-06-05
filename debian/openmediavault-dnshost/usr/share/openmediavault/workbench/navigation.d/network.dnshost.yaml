@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "network.dnshost"
+  position: 15
+  text: _("Dynamic Hostname")
+  icon: "mdi:lan-connect"
+  url: "/network/dnshost"

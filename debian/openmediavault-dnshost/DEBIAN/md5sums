@@ -1,0 +1,17 @@
+0f79efa8fb8ba4fc402a49d2782a9469  usr/sbin/dynamic-hostname.py
+6ce1d31380a59e49182941d7b7998278  usr/sbin/omv-dnshost-cron
+82ebaa369457edb730ae2e63360211cd  usr/sbin/omv-dnshost-fix-cron
+161c718dc2affc899377d236f61c28b8  usr/share/doc/openmediavault-dnshost/changelog.gz
+28e9588a289aae8910b107bcec8bb252  usr/share/doc/openmediavault-dnshost/copyright
+83cc324ae242f5ef263d5b4b4f2937c0  usr/share/openmediavault/confdb/create.d/conf.system.network.dnshost.sh
+a62f36c3db180c4401e598edb8cc9864  usr/share/openmediavault/datamodels/conf.system.network.dnshost.json
+a00ab2725a66a959d682443590f2aac8  usr/share/openmediavault/engined/inc/91dnshost.inc
+3af79dea263cccabc5a0002b87df8f62  usr/share/openmediavault/engined/module/dnshost.inc
+036a0b3e67168831a0e595f14a403ad0  usr/share/openmediavault/engined/rpc/networkdnshost.inc
+a389358fefad3de56a6b19170433d8cd  usr/share/openmediavault/locale/openmediavault-dnshost.pot
+a75ed8e7a87943fcc1a2923b27e10875  usr/share/openmediavault/locale/pl/openmediavault-dnshost.po
+654ea8b1409c422b6cd5a9c1a3cc6b79  usr/share/openmediavault/locale/pl_PL/openmediavault-dnshost.po
+3a9a4916e3d7a6dbfe1933b09fa4633e  usr/share/openmediavault/workbench/component.d/omv-network-dnshost-form-page.yaml
+5c063ea05f6dd8494b90885a67712726  usr/share/openmediavault/workbench/log.d/dnshost.yaml
+a155e3e0d7a012225a6ffe12e346719d  usr/share/openmediavault/workbench/navigation.d/network.dnshost.yaml
+9c10123a96f8087ba9cb23a3f7e3c09d  usr/share/openmediavault/workbench/route.d/network.dnshost.yaml
