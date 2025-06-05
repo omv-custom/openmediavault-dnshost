@@ -1,7 +1,7 @@
 0f79efa8fb8ba4fc402a49d2782a9469  usr/sbin/dynamic-hostname.py
 6ce1d31380a59e49182941d7b7998278  usr/sbin/omv-dnshost-cron
 82ebaa369457edb730ae2e63360211cd  usr/sbin/omv-dnshost-fix-cron
-161c718dc2affc899377d236f61c28b8  usr/share/doc/openmediavault-dnshost/changelog.gz
+9a5034d497e8c3d1a81f417094a29ef5  usr/share/doc/openmediavault-dnshost/changelog.gz
 28e9588a289aae8910b107bcec8bb252  usr/share/doc/openmediavault-dnshost/copyright
 83cc324ae242f5ef263d5b4b4f2937c0  usr/share/openmediavault/confdb/create.d/conf.system.network.dnshost.sh
 a62f36c3db180c4401e598edb8cc9864  usr/share/openmediavault/datamodels/conf.system.network.dnshost.json

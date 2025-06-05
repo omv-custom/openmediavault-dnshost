@@ -1,0 +1,8 @@
+version: "1.0"
+type: navigation-item
+data:
+  path: "network.dnshost.noip"
+  text: _("NoIp")
+  position: 10
+  icon: "tune"
+  url: "/network/dnshost/noip"
